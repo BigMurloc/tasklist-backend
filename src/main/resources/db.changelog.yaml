@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20210206_0_init.sql
+      author: Dominik Pasymowski
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20210206_0_init.sql
+  - changeSet:
+      id: 20210206_1_add_basic_user.sql
+      author: Dominik Pasymowski
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20210206_1_add_basic_user.sql
+  - changeSet:
+      id: 20210206_2_add_authority.sql
+      author: Dominik Pasymowski
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20210206_2_add_authority.sql
+  - changeSet:
+      id: 20210207_add_hibernate_sequence.sql
+      author: Dominik Pasymowski
+      sqlFile:
+        relativeToChangelogFile: true
+        stripComments: true
+        splitStatements: false
+        path: db.changelog/20210207_add_hibernate_sequence.sql
