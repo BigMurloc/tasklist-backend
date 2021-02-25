@@ -11,6 +11,8 @@ import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
 import pl.tasklist.tasklistbackend.service.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 public class UserController {
 
@@ -24,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<?> save(@RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
+    public ResponseEntity<?> save(@Valid @RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
         userService.save(convertToEntity(userDTO));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
