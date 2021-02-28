@@ -30,6 +30,17 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(value = UnauthorizedException.class)
+    protected ResponseEntity<Object> handleUnauthorized(RuntimeException exception, WebRequest webRequest){
+        return handleExceptionInternal(
+                exception,
+                null,
+                new HttpHeaders(),
+                HttpStatus.UNAUTHORIZED,
+                webRequest
+        );
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
