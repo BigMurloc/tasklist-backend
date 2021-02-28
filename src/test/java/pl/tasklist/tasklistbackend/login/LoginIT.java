@@ -58,4 +58,16 @@ public class LoginIT {
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
     }
 
+    @Test
+    public void when_user_does_not_exist_then_UNAUTHORIZED(){
+        UserLoginDTO userLoginDTO = new UserLoginDTO();
+        given()
+                .when()
+                .body(userLoginDTO)
+                .contentType(ContentType.JSON)
+                .post("/api/login")
+                .then()
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
 }
