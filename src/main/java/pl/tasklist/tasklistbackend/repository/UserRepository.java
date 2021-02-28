@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
+import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -21,25 +22,26 @@ public class UserRepository {
 
     @Transactional
     public void save(User user) throws UserAlreadyExistsException {
-        Long count = doesExist(user.getUsername());
-        if(count != 0){
+        if(doesExist(user.getUsername())){
             throw new UserAlreadyExistsException();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
 
-    public Long doesExist(String username) {
+    public boolean doesExist(String username) {
         String query = "SELECT count(user) FROM User user WHERE user.username =: username";
         Long count = (Long) entityManager
                 .createQuery(query)
                 .setParameter("username", username)
                 .getSingleResult();
-        return count;
+        return count > 0;
     }
 
 
-    public User findByUsername(String username) {
+    public User findByUsername(String username) throws UserDoesNotExistException {
+        if(doesExist(username))
+            throw new UserDoesNotExistException();
         String query = "SELECT user FROM User user WHERE user.username =: username";
         return entityManager
                 .createQuery(query, User.class)

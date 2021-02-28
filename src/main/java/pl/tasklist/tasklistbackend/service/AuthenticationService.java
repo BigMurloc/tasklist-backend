@@ -6,6 +6,7 @@ import pl.tasklist.tasklistbackend.config.AppAuthentication;
 import pl.tasklist.tasklistbackend.dto.UserLoginDTO;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UnauthorizedException;
+import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
 import pl.tasklist.tasklistbackend.repository.UserRepository;
 
 @Service
@@ -20,9 +21,13 @@ public class AuthenticationService {
     }
 
     public boolean login(UserLoginDTO userLoginDTO) throws UnauthorizedException {
-        if(userRepository.doesExist(userLoginDTO.getUsername()) == 0)
+        User user;
+        try {
+            user = userRepository.findByUsername(userLoginDTO.getUsername());
+        } catch (UserDoesNotExistException e) {
+            e.printStackTrace();
             throw new UnauthorizedException();
-        User user = userRepository.findByUsername(userLoginDTO.getUsername());
+        }
         if(userService.matches(userLoginDTO.getPassword(), user.getPassword())){
             SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(user));
             return true;
