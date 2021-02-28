@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserRegisterDTO {
 
     @NotBlank(message = "Username cannot be blank!")
     @Size(min = 4, max = 16)
