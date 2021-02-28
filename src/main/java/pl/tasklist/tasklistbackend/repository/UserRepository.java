@@ -1,7 +1,8 @@
-package pl.tasklist.tasklistbackend.service;
+package pl.tasklist.tasklistbackend.repository;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
@@ -9,13 +10,13 @@ import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-@Service
-public class UserService {
+@Repository
+public class UserRepository {
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final EntityManager entityManager;
 
-    public UserService(EntityManager entityManager) {
+    public UserRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
