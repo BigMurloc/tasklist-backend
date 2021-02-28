@@ -29,7 +29,7 @@ public class UserRepository {
         entityManager.persist(user);
     }
 
-    private Long doesExist(String username) {
+    public Long doesExist(String username) {
         String query = "SELECT count(user) FROM User user WHERE user.username =: username";
         Long count = (Long) entityManager
                 .createQuery(query)
@@ -40,6 +40,10 @@ public class UserRepository {
 
 
     public User findByUsername(String username) {
-        return null;
+        String query = "SELECT User FROM User u WHERE u.username =: username";
+        return (User) entityManager
+                .createQuery(query)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 }
