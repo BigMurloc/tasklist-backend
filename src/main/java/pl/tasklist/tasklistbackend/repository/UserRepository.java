@@ -40,9 +40,9 @@ public class UserRepository {
 
 
     public User findByUsername(String username) {
-        String query = "SELECT User FROM User u WHERE u.username =: username";
-        return (User) entityManager
-                .createQuery(query)
+        String query = "SELECT user FROM User user WHERE user.username =: username";
+        return entityManager
+                .createQuery(query, User.class)
                 .setParameter("username", username)
                 .getSingleResult();
     }
