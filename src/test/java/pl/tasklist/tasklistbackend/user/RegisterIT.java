@@ -104,7 +104,7 @@ public class RegisterIT {
     }
 
     @Test
-    public void when_password_does_not_match_regex_then_BAD_REQUEST(){
+    public void when_username_does_not_match_regex_then_BAD_REQUEST(){
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
         userRegisterDTO.setUsername("tester!");
         userRegisterDTO.setPassword(CORRECT_PASSWORD_EXAMPLE);
