@@ -18,6 +18,8 @@ public class UserRegisterDTO {
 
     @NotBlank(message = "Password cannot be blank!")
     @Size(min = 4, max = 16)
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+",
+            message = "Password must include one big letter, one small letter, one digit, one special character")
     private String password;
 
 }

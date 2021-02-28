@@ -131,4 +131,18 @@ public class RegisterIT {
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
+    @Test
+    public void when_password_does_not_match_regex_then_BAD_REQUEST(){
+        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
+        userRegisterDTO.setUsername("test");
+        userRegisterDTO.setPassword("abcdef");
+        given()
+                .when()
+                .body(userRegisterDTO)
+                .contentType(ContentType.JSON)
+                .post("api/register")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
 }
