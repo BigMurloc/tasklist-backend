@@ -3,7 +3,6 @@ package pl.tasklist.tasklistbackend.repository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
 
@@ -40,4 +39,7 @@ public class UserRepository {
     }
 
 
+    public User findByUsername(String username) {
+        return null;
+    }
 }
