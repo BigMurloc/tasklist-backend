@@ -21,7 +21,7 @@ public class AuthenticationService {
     public boolean login(UserLoginDTO userLoginDTO) {
         User user = userRepository.findByUsername(userLoginDTO.getUsername());
         if(userService.matches(userLoginDTO.getPassword(), user.getPassword())){
-            SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(null));
+            SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(user));
             return true;
         }
         return false;
