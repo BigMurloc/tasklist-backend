@@ -1,8 +1,11 @@
 package pl.tasklist.tasklistbackend.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Getter
 @Entity
 @Table(name = "authority")
 public class Authority {
