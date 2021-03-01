@@ -1,7 +1,7 @@
 CREATE TABLE task
 (
-    id          BIGINT,
-    creator     BIGINT,
+    id          BIGINT NOT NULL,
+    creator     BIGINT NOT NULL,
     title       VARCHAR(100) NOT NULL,
     description VARCHAR(450),
     timestamp   TIMESTAMP NOT NULL,

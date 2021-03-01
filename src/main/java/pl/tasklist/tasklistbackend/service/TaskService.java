@@ -28,6 +28,9 @@ public class TaskService {
 
     public void add(TaskDTO taskDTO) {
         Task task = convertToEntity(taskDTO);
+        User currentUser = (User) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        task.setUser(currentUser);
         task.setTimestamp(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS));
         taskRepository.save(task);
     }
