@@ -7,6 +7,7 @@ import pl.tasklist.tasklistbackend.dto.TaskDTO;
 import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
+import pl.tasklist.tasklistbackend.exception.ForbiddenException;
 import pl.tasklist.tasklistbackend.repository.TaskRepository;
 
 import java.time.LocalDateTime;
@@ -35,13 +36,20 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void update(Long id, TaskDTO taskDTO) {
+    public void update(Long id, TaskDTO taskDTO) throws ForbiddenException {
         Task task = taskRepository.findById(id);
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!currentUser.equals(task.getUser()))
+            throw new ForbiddenException();
         modelMapper.map(taskDTO, task);
         taskRepository.update(task);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws ForbiddenException {
+        Task task = taskRepository.findById(id);
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!currentUser.equals(task.getUser()))
+            throw new ForbiddenException();
         taskRepository.delete(id);
     }
 

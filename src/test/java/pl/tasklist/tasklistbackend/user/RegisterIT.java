@@ -17,13 +17,13 @@ import static org.hamcrest.Matchers.equalTo;
 @IntegrationTest
 public class RegisterIT {
 
-    private final String CORRECT_PASSWORD_EXAMPLE = "aA1!";
+    private static final String CORRECT_PASSWORD_EXAMPLE = "aA1!";
 
     @BeforeClass
     public static void before(){
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
         userRegisterDTO.setUsername("alreadyExists");
-        userRegisterDTO.setPassword("alreadyExists");
+        userRegisterDTO.setPassword(CORRECT_PASSWORD_EXAMPLE);
         given()
             .body(userRegisterDTO)
             .contentType(ContentType.JSON)

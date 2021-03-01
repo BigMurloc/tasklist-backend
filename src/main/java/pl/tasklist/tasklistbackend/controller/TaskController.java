@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
 import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
+import pl.tasklist.tasklistbackend.exception.ForbiddenException;
 import pl.tasklist.tasklistbackend.service.TaskService;
 
 import javax.validation.Valid;
@@ -27,13 +28,13 @@ public class TaskController {
     }
 
     @PostMapping("task/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO){
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) throws ForbiddenException {
         taskService.update(id, taskDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("task/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable Long id) throws ForbiddenException {
         taskService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
