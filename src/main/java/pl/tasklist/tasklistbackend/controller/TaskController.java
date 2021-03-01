@@ -32,7 +32,7 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("task/delete/{id}")
+    @DeleteMapping("task/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         taskService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
