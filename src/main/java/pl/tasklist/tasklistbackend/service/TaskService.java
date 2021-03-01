@@ -9,7 +9,9 @@ import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.repository.TaskRepository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ public class TaskService {
 
     public void add(TaskDTO taskDTO) {
         Task task = convertToEntity(taskDTO);
+        task.setTimestamp(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS));
         taskRepository.save(task);
     }
 
