@@ -2,6 +2,7 @@ package pl.tasklist.tasklistbackend.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "task")
@@ -19,5 +20,5 @@ public class Task {
 
     private String description;
 
-    private String timestamp;
+    private LocalDateTime timestamp;
 }
