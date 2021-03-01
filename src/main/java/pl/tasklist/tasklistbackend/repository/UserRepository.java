@@ -40,7 +40,7 @@ public class UserRepository {
 
 
     public User findByUsername(String username) throws UserDoesNotExistException {
-        if(doesExist(username))
+        if(!doesExist(username))
             throw new UserDoesNotExistException();
         String query = "SELECT user FROM User user WHERE user.username =: username";
         return entityManager
