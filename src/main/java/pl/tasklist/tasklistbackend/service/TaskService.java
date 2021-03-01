@@ -1,12 +1,14 @@
 package pl.tasklist.tasklistbackend.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.repository.TaskRepository;
 
 import java.util.List;
 
+@Service
 public class TaskService {
 
     private final ModelMapper modelMapper;

@@ -2,10 +2,7 @@ package pl.tasklist.tasklistbackend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.service.TaskService;
@@ -13,6 +10,7 @@ import pl.tasklist.tasklistbackend.service.TaskService;
 import javax.validation.Valid;
 import java.util.List;
 
+@RestController
 public class TaskController {
 
     private final TaskService taskService;
