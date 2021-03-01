@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import pl.tasklist.tasklistbackend.entity.Task;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -14,10 +15,12 @@ public class TaskRepository {
         this.entityManager = entityManager;
     }
 
+    @Transactional
     public void save(Task task) {
         entityManager.persist(task);
     }
 
+    @Transactional
     public void update(Task task) {
         entityManager.merge(task);
     }
@@ -26,6 +29,7 @@ public class TaskRepository {
         return entityManager.find(Task.class, primaryKey);
     }
 
+    @Transactional
     public void delete(Long primaryKey) {
         entityManager.remove(findById(primaryKey));
     }
