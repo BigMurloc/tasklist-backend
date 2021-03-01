@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
+import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.service.TaskService;
 
@@ -38,7 +39,7 @@ public class TaskController {
     }
 
     @GetMapping("task/getAll")
-    public List<Task> getAll(){
+    public List<TaskGetDTO> getAll(){
         return taskService.getAll();
     }
 

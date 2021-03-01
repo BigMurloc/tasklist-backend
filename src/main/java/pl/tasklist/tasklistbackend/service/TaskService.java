@@ -4,11 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
+import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -36,9 +39,13 @@ public class TaskService {
         taskRepository.delete(id);
     }
 
-    public List<Task> getAll() {
+    public List<TaskGetDTO> getAll() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return taskRepository.getAll(currentUser.getId());
+        List<Task> tasks = taskRepository.getAll(currentUser.getId());
+        return tasks
+                .stream()
+                .map((task) -> modelMapper.map(task, TaskGetDTO.class))
+                .collect(Collectors.toList());
     }
 
     private Task convertToEntity(TaskDTO taskDTO){
