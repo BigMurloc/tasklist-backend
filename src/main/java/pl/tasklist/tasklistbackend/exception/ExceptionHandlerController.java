@@ -41,6 +41,16 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(value = ForbiddenException.class)
+    protected ResponseEntity<Object> handleForbidden(RuntimeException exception, WebRequest webRequest){
+        return handleExceptionInternal(
+                exception,
+                null,
+                new HttpHeaders(),
+                HttpStatus.FORBIDDEN,
+                webRequest
+        );
+    }
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
