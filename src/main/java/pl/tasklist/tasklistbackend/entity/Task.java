@@ -18,6 +18,7 @@ public class Task {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "creator")
     private User user;
 
     @NotBlank
