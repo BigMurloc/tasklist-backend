@@ -5,5 +5,5 @@ import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
 
 public interface UserService {
     boolean matches(String rawPassword, String encodedPassword);
-    void register(User user) throws UserAlreadyExistsException;
+    User register(User user) throws UserAlreadyExistsException;
 }

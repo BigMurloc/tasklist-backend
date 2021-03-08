@@ -5,7 +5,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
-import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
 import pl.tasklist.tasklistbackend.repository.UserRepository;
 import pl.tasklist.tasklistbackend.service.UserService;
 
@@ -23,12 +22,12 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public void register(User user) throws UserAlreadyExistsException {
+    public User register(User user) throws UserAlreadyExistsException {
         if(userRepository.existsByUsername(user.getUsername())){
             throw new UserAlreadyExistsException();
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 }

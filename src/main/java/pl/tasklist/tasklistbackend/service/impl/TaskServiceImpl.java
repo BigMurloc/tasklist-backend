@@ -29,22 +29,22 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public void add(TaskDTO taskDTO) {
+    public Task add(TaskDTO taskDTO) {
         Task task = convertToEntity(taskDTO);
         User currentUser = (User) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
         task.setUser(currentUser);
         task.setTimestamp(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS));
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
-    public void update(Long id, TaskDTO taskDTO) throws ForbiddenException {
+    public Task update(Long id, TaskDTO taskDTO) throws ForbiddenException {
         Task task = taskRepository.findById(id).orElseThrow();
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!currentUser.equals(task.getUser()))
             throw new ForbiddenException();
         modelMapper.map(taskDTO, task);
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
     public void delete(Long id) throws ForbiddenException {
