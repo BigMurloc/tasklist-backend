@@ -25,9 +25,9 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> save(@Valid @RequestBody UserRegisterDTO userRegisterDTO) throws UserAlreadyExistsException {
-        userServiceImpl.register(convertToEntity(userRegisterDTO));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<User> save(@Valid @RequestBody UserRegisterDTO userRegisterDTO) throws UserAlreadyExistsException {
+        User newUser = userServiceImpl.register(convertToEntity(userRegisterDTO));
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     private User convertToEntity(UserRegisterDTO userRegisterDTO){

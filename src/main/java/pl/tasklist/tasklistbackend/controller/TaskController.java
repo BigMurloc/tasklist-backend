@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.tasklist.tasklistbackend.dto.TaskDTO;
 import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
+import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.exception.ForbiddenException;
 import pl.tasklist.tasklistbackend.service.impl.TaskServiceImpl;
 
@@ -21,15 +22,15 @@ public class TaskController {
     }
 
     @PostMapping("task/add")
-    public ResponseEntity<?> add( @Valid @RequestBody TaskDTO taskDTO){
-        taskServiceImpl.add(taskDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> add(@Valid @RequestBody TaskDTO taskDTO) {
+        Task newTask = taskServiceImpl.add(taskDTO);
+        return new ResponseEntity<>(newTask, HttpStatus.CREATED);
     }
 
     @PostMapping("task/update/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) throws ForbiddenException {
-        taskServiceImpl.update(id, taskDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Task updatedTask = taskServiceImpl.update(id, taskDTO);
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
     @DeleteMapping("task/delete/{id}")
@@ -39,8 +40,9 @@ public class TaskController {
     }
 
     @GetMapping("task/getAll")
-    public List<TaskGetDTO> getAll(){
-        return taskServiceImpl.getAll();
+    public ResponseEntity<List<TaskGetDTO>> getAll() {
+        List<TaskGetDTO> taskGetDTOs = taskServiceImpl.getAll();
+        return new ResponseEntity<>(taskGetDTOs, HttpStatus.OK);
     }
 
 }
