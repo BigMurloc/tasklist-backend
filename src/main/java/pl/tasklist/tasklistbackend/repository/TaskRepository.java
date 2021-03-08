@@ -1,44 +1,12 @@
 package pl.tasklist.tasklistbackend.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.tasklist.tasklistbackend.entity.Task;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public class TaskRepository {
-    private final EntityManager entityManager;
-
-    public TaskRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    @Transactional
-    public void save(Task task) {
-        entityManager.persist(task);
-    }
-
-    @Transactional
-    public void update(Task task) {
-        entityManager.merge(task);
-    }
-
-    public Task findById(Long primaryKey) {
-        return entityManager.find(Task.class, primaryKey);
-    }
-
-    @Transactional
-    public void delete(Long primaryKey) {
-        entityManager.remove(findById(primaryKey));
-    }
-
-    public List<Task> getAll(Long creator) {
-        String query = "SELECT task FROM Task task WHERE task.user.id =: creator";
-        return entityManager
-                .createQuery(query)
-                .setParameter("creator", creator)
-                .getResultList();
-    }
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    List<Task> findByUserId(Long id);
 }

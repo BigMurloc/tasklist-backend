@@ -15,8 +15,8 @@ import pl.tasklist.tasklistbackend.dto.UserRegisterDTO;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
-import pl.tasklist.tasklistbackend.repository.TaskRepository;
-import pl.tasklist.tasklistbackend.repository.UserRepository;
+import pl.tasklist.tasklistbackend.repository.TaskRepositoryOld;
+import pl.tasklist.tasklistbackend.repository.UserRepositoryOld;
 
 import java.util.List;
 
@@ -31,9 +31,9 @@ public class TaskIT {
     private static Response ownerResponse;
     private static Response authUserResponse;
     @Autowired
-    private TaskRepository taskRepository;
+    private TaskRepositoryOld taskRepositoryOld;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepositoryOld userRepositoryOld;
 
     @BeforeClass
     public static void setUp(){
@@ -120,8 +120,8 @@ public class TaskIT {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTitle("test123");
         taskDTO.setDescription("test");
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
                 .cookies(ownerResponse.getCookies())
                 .body(taskDTO)
@@ -136,8 +136,8 @@ public class TaskIT {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTitle("test123");
         taskDTO.setDescription("test");
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
                 .body(taskDTO)
                 .contentType(ContentType.JSON)
@@ -151,8 +151,8 @@ public class TaskIT {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setTitle("test123");
         taskDTO.setDescription("test");
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
             .cookies(authUserResponse.getCookies())
                 .body(taskDTO)
@@ -171,8 +171,8 @@ public class TaskIT {
                 .body(taskDTO)
                 .contentType(ContentType.JSON)
                 .post("/api/task/add");
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         Task taskToBeDeleted = tasks.stream()
                 .filter((task) -> task.getTitle().equals("delete"))
                 .findFirst().get();
@@ -185,8 +185,8 @@ public class TaskIT {
 
     @Test
     public void when_auth_user_deletes_owners_task_then_FORBIDDEN() throws UserDoesNotExistException {
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
             .cookies(authUserResponse.getCookies())
                 .delete("/api/task/delete/" + tasks.stream().findAny().get().getId())
@@ -196,8 +196,8 @@ public class TaskIT {
 
     @Test
     public void when_unauthenticated_user_deletes_owners_task_then_UNAUTHORIZED() throws UserDoesNotExistException {
-        User owner = userRepository.findByUsername("owner");
-        List<Task> tasks = taskRepository.getAll(owner.getId());
+        User owner = userRepositoryOld.findByUsername("owner");
+        List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
                 .post("/api/task/delete/" + tasks.stream().findAny().get().getId())
                 .then()
