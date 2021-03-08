@@ -22,10 +22,8 @@ public class AuthenticationService {
 
     public boolean login(UserLoginDTO userLoginDTO) throws UnauthorizedException {
         User user;
-        try {
-            user = userRepository.findByUsername(userLoginDTO.getUsername());
-        } catch (UserDoesNotExistException e) {
-            e.printStackTrace();
+        user = userRepository.findByUsername(userLoginDTO.getUsername());
+        if(user == null){
             throw new UnauthorizedException();
         }
         if(userService.matches(userLoginDTO.getPassword(), user.getPassword())){

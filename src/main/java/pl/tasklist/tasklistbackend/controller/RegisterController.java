@@ -9,24 +9,26 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.tasklist.tasklistbackend.dto.UserRegisterDTO;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserAlreadyExistsException;
+import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
 import pl.tasklist.tasklistbackend.repository.UserRepository;
+import pl.tasklist.tasklistbackend.service.UserService;
 
 import javax.validation.Valid;
 
 @RestController
 public class RegisterController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public RegisterController(UserRepository userRepository, ModelMapper modelMapper) {
-        this.userRepository = userRepository;
+    public RegisterController(UserService userService, ModelMapper modelMapper) {
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> save(@Valid @RequestBody UserRegisterDTO userRegisterDTO) throws UserAlreadyExistsException {
-        userRepository.save(convertToEntity(userRegisterDTO));
+        userService.register(convertToEntity(userRegisterDTO));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

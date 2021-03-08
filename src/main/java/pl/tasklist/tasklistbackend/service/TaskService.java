@@ -22,7 +22,8 @@ public class TaskService {
     private final ModelMapper modelMapper;
     private final TaskRepository taskRepository;
 
-    public TaskService(ModelMapper modelMapper, TaskRepository taskRepository) {
+    public TaskService(ModelMapper modelMapper,
+                       TaskRepository taskRepository) {
         this.modelMapper = modelMapper;
         this.taskRepository = taskRepository;
     }
@@ -37,25 +38,25 @@ public class TaskService {
     }
 
     public void update(Long id, TaskDTO taskDTO) throws ForbiddenException {
-        Task task = taskRepository.findById(id);
+        Task task = taskRepository.findById(id).orElseThrow();
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!currentUser.equals(task.getUser()))
             throw new ForbiddenException();
         modelMapper.map(taskDTO, task);
-        taskRepository.update(task);
+        taskRepository.save(task);
     }
 
     public void delete(Long id) throws ForbiddenException {
-        Task task = taskRepository.findById(id);
+        Task task = taskRepository.findById(id).orElseThrow();
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!currentUser.equals(task.getUser()))
             throw new ForbiddenException();
-        taskRepository.delete(id);
+        taskRepository.delete(task);
     }
 
     public List<TaskGetDTO> getAll() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Task> tasks = taskRepository.getAll(currentUser.getId());
+        List<Task> tasks = taskRepository.findByUserId(currentUser.getId());
         return tasks
                 .stream()
                 .map((task) -> modelMapper.map(task, TaskGetDTO.class))
