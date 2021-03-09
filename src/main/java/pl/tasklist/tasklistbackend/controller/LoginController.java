@@ -3,7 +3,7 @@ package pl.tasklist.tasklistbackend.controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.tasklist.tasklistbackend.dto.UserLoginDTO;
+import pl.tasklist.tasklistbackend.payload.LoginRequest;
 import pl.tasklist.tasklistbackend.exception.UnauthorizedException;
 import pl.tasklist.tasklistbackend.service.impl.AuthenticationServiceImpl;
 
@@ -18,8 +18,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody UserLoginDTO userLoginDTO) throws UnauthorizedException {
-        if(!authenticationServiceImpl.login(userLoginDTO))
+    public void login(@RequestBody LoginRequest loginRequest) throws UnauthorizedException {
+        if(!authenticationServiceImpl.login(loginRequest))
             throw new UnauthorizedException();
     }
 

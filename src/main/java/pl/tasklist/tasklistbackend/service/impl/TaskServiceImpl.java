@@ -3,8 +3,8 @@ package pl.tasklist.tasklistbackend.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.tasklist.tasklistbackend.dto.TaskDTO;
-import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
+import pl.tasklist.tasklistbackend.payload.TaskRequest;
+import pl.tasklist.tasklistbackend.payload.TaskResponse;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.ForbiddenException;
@@ -29,8 +29,8 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task add(TaskDTO taskDTO) {
-        Task task = convertToEntity(taskDTO);
+    public Task add(TaskRequest taskRequest) {
+        Task task = convertToEntity(taskRequest);
         User currentUser = (User) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
         task.setUser(currentUser);
@@ -38,12 +38,12 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
-    public Task update(Long id, TaskDTO taskDTO) throws ForbiddenException {
+    public Task update(Long id, TaskRequest taskRequest) throws ForbiddenException {
         Task task = taskRepository.findById(id).orElseThrow();
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!currentUser.equals(task.getUser()))
             throw new ForbiddenException();
-        modelMapper.map(taskDTO, task);
+        modelMapper.map(taskRequest, task);
         return taskRepository.save(task);
     }
 
@@ -55,17 +55,17 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.delete(task);
     }
 
-    public List<TaskGetDTO> getAll() {
+    public List<TaskResponse> getAll() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Task> tasks = taskRepository.findByUserId(currentUser.getId());
         return tasks
                 .stream()
-                .map((task) -> modelMapper.map(task, TaskGetDTO.class))
+                .map((task) -> modelMapper.map(task, TaskResponse.class))
                 .collect(Collectors.toList());
     }
 
-    private Task convertToEntity(TaskDTO taskDTO){
-        Task task = modelMapper.map(taskDTO, Task.class);
+    private Task convertToEntity(TaskRequest taskRequest){
+        Task task = modelMapper.map(taskRequest, Task.class);
         return task;
     }
 }
