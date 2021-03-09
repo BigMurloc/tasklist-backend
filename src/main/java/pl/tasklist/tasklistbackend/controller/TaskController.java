@@ -3,8 +3,8 @@ package pl.tasklist.tasklistbackend.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.tasklist.tasklistbackend.dto.TaskDTO;
-import pl.tasklist.tasklistbackend.dto.TaskGetDTO;
+import pl.tasklist.tasklistbackend.payload.TaskRequest;
+import pl.tasklist.tasklistbackend.payload.TaskResponse;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.exception.ForbiddenException;
 import pl.tasklist.tasklistbackend.service.impl.TaskServiceImpl;
@@ -22,14 +22,14 @@ public class TaskController {
     }
 
     @PostMapping("task/add")
-    public ResponseEntity<?> add(@Valid @RequestBody TaskDTO taskDTO) {
-        Task newTask = taskServiceImpl.add(taskDTO);
+    public ResponseEntity<?> add(@Valid @RequestBody TaskRequest taskRequest) {
+        Task newTask = taskServiceImpl.add(taskRequest);
         return new ResponseEntity<>(newTask, HttpStatus.CREATED);
     }
 
     @PostMapping("task/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) throws ForbiddenException {
-        Task updatedTask = taskServiceImpl.update(id, taskDTO);
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody TaskRequest taskRequest) throws ForbiddenException {
+        Task updatedTask = taskServiceImpl.update(id, taskRequest);
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
@@ -40,9 +40,9 @@ public class TaskController {
     }
 
     @GetMapping("task/getAll")
-    public ResponseEntity<List<TaskGetDTO>> getAll() {
-        List<TaskGetDTO> taskGetDTOs = taskServiceImpl.getAll();
-        return new ResponseEntity<>(taskGetDTOs, HttpStatus.OK);
+    public ResponseEntity<List<TaskResponse>> getAll() {
+        List<TaskResponse> taskResponses = taskServiceImpl.getAll();
+        return new ResponseEntity<>(taskResponses, HttpStatus.OK);
     }
 
 }

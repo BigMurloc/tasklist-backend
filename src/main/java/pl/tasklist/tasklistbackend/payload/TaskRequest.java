@@ -1,4 +1,4 @@
-package pl.tasklist.tasklistbackend.dto;
+package pl.tasklist.tasklistbackend.payload;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class TaskDTO {
+public class TaskRequest {
 
     @NotBlank
     private String title;

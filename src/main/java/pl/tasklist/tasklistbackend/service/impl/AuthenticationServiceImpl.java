@@ -3,7 +3,7 @@ package pl.tasklist.tasklistbackend.service.impl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.tasklist.tasklistbackend.config.AppAuthentication;
-import pl.tasklist.tasklistbackend.dto.UserLoginDTO;
+import pl.tasklist.tasklistbackend.payload.LoginRequest;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UnauthorizedException;
 import pl.tasklist.tasklistbackend.repository.UserRepository;
@@ -21,13 +21,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userServiceImpl = userServiceImpl;
     }
 
-    public boolean login(UserLoginDTO userLoginDTO) throws UnauthorizedException {
+    public boolean login(LoginRequest loginRequest) throws UnauthorizedException {
         User user;
-        user = userRepository.findByUsername(userLoginDTO.getUsername());
+        user = userRepository.findByUsername(loginRequest.getUsername());
         if(user == null){
             throw new UnauthorizedException();
         }
-        if(userServiceImpl.matches(userLoginDTO.getPassword(), user.getPassword())){
+        if(userServiceImpl.matches(loginRequest.getPassword(), user.getPassword())){
             SecurityContextHolder.getContext().setAuthentication(new AppAuthentication(user));
             return true;
         }

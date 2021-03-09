@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.tasklist.tasklistbackend.IntegrationTest;
-import pl.tasklist.tasklistbackend.dto.TaskDTO;
-import pl.tasklist.tasklistbackend.dto.UserLoginDTO;
-import pl.tasklist.tasklistbackend.dto.UserRegisterDTO;
+import pl.tasklist.tasklistbackend.payload.TaskRequest;
+import pl.tasklist.tasklistbackend.payload.LoginRequest;
+import pl.tasklist.tasklistbackend.payload.RegisterRequest;
 import pl.tasklist.tasklistbackend.entity.Task;
 import pl.tasklist.tasklistbackend.entity.User;
 import pl.tasklist.tasklistbackend.exception.UserDoesNotExistException;
@@ -39,18 +39,18 @@ public class TaskIT {
     public static void setUp(){
         registerUsers();
         loginUsers();
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test");
+        taskRequest.setDescription("test");
         given()
                 .cookies(ownerResponse.getCookies())
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/add");
     }
 
     private static void loginUsers() {
-        UserLoginDTO ownerLogin = new UserLoginDTO();
+        LoginRequest ownerLogin = new LoginRequest();
         ownerLogin.setUsername("owner");
         ownerLogin.setPassword(CORRECT_PASSWORD_EXAMPLE);
         ownerResponse = given()
@@ -58,7 +58,7 @@ public class TaskIT {
                 .contentType(ContentType.JSON)
                 .post("/api/login")
                 .thenReturn();
-        UserLoginDTO authenticatedUserLogin = new UserLoginDTO();
+        LoginRequest authenticatedUserLogin = new LoginRequest();
         authenticatedUserLogin.setUsername("authUser");
         authenticatedUserLogin.setPassword(CORRECT_PASSWORD_EXAMPLE);
         authUserResponse = given()
@@ -69,10 +69,10 @@ public class TaskIT {
     }
 
     private static void registerUsers() {
-        UserRegisterDTO owner = new UserRegisterDTO();
+        RegisterRequest owner = new RegisterRequest();
         owner.setUsername("owner");
         owner.setPassword(CORRECT_PASSWORD_EXAMPLE);
-        UserRegisterDTO authenticatedUser = new UserRegisterDTO();
+        RegisterRequest authenticatedUser = new RegisterRequest();
         authenticatedUser.setUsername("authUser");
         authenticatedUser.setPassword(CORRECT_PASSWORD_EXAMPLE);
         given()
@@ -88,13 +88,13 @@ public class TaskIT {
 
     @Test
     public void when_auth_user_creates_task_then_CREATED() {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test");
+        taskRequest.setDescription("test");
         given()
                 .when()
                 .cookies(authUserResponse.getCookies())
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/add")
                 .then()
@@ -103,12 +103,12 @@ public class TaskIT {
 
     @Test
     public void when_unauthenticated_user_creates_task_then_UNAUTHORIZED() {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test");
+        taskRequest.setDescription("test");
         given()
                 .when()
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/add")
                 .then()
@@ -117,14 +117,14 @@ public class TaskIT {
 
     @Test
     public void when_owner_updates_task_then_OK() throws UserDoesNotExistException {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test123");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test123");
+        taskRequest.setDescription("test");
         User owner = userRepositoryOld.findByUsername("owner");
         List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
                 .cookies(ownerResponse.getCookies())
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/update/" + tasks.get(0).getId())
                 .then()
@@ -133,13 +133,13 @@ public class TaskIT {
 
     @Test
     public void when_unauthenticated_user_updates_owners_task_then_UNAUTHORIZED() throws UserDoesNotExistException {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test123");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test123");
+        taskRequest.setDescription("test");
         User owner = userRepositoryOld.findByUsername("owner");
         List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/update/" + tasks.get(0).getId())
                 .then()
@@ -148,14 +148,14 @@ public class TaskIT {
 
     @Test
     public void when_auth_user_updates_owners_task_then_FORBIDDEN() throws UserDoesNotExistException {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("test123");
-        taskDTO.setDescription("test");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("test123");
+        taskRequest.setDescription("test");
         User owner = userRepositoryOld.findByUsername("owner");
         List<Task> tasks = taskRepositoryOld.getAll(owner.getId());
         given()
             .cookies(authUserResponse.getCookies())
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/update/" + tasks.get(0).getId())
             .then()
@@ -164,11 +164,11 @@ public class TaskIT {
 
     @Test
     public void when_owner_deletes_task_then_OK() throws UserDoesNotExistException {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("delete");
+        TaskRequest taskRequest = new TaskRequest();
+        taskRequest.setTitle("delete");
         given()
                 .cookies(ownerResponse.getCookies())
-                .body(taskDTO)
+                .body(taskRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/task/add");
         User owner = userRepositoryOld.findByUsername("owner");

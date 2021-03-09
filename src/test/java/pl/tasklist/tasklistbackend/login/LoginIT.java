@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.tasklist.tasklistbackend.IntegrationTest;
-import pl.tasklist.tasklistbackend.dto.UserLoginDTO;
-import pl.tasklist.tasklistbackend.dto.UserRegisterDTO;
+import pl.tasklist.tasklistbackend.payload.LoginRequest;
+import pl.tasklist.tasklistbackend.payload.RegisterRequest;
 
 import static io.restassured.RestAssured.given;
 
@@ -21,23 +21,23 @@ public class LoginIT {
 
     @BeforeClass
     public static void before(){
-        UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
-        userRegisterDTO.setUsername(USERNAME);
-        userRegisterDTO.setPassword(PASSWORD);
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername(USERNAME);
+        registerRequest.setPassword(PASSWORD);
         given()
-                .body(userRegisterDTO)
+                .body(registerRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/register");
     }
 
     @Test
     public void when_user_have_correct_credentials_then_OK(){
-        UserLoginDTO userLoginDTO = new UserLoginDTO();
-        userLoginDTO.setUsername(USERNAME);
-        userLoginDTO.setPassword(PASSWORD);
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(USERNAME);
+        loginRequest.setPassword(PASSWORD);
         given()
             .when()
-                .body(userLoginDTO)
+                .body(loginRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/login")
             .then()
@@ -46,12 +46,12 @@ public class LoginIT {
 
     @Test
     public void when_wrong_password_then_UNAUTHORIZED(){
-        UserLoginDTO userLoginDTO = new UserLoginDTO();
-        userLoginDTO.setUsername(USERNAME);
-        userLoginDTO.setPassword(PASSWORD+"wrong");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(USERNAME);
+        loginRequest.setPassword(PASSWORD+"wrong");
         given()
                 .when()
-                .body(userLoginDTO)
+                .body(loginRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/login")
                 .then()
@@ -60,10 +60,10 @@ public class LoginIT {
 
     @Test
     public void when_user_does_not_exist_then_UNAUTHORIZED(){
-        UserLoginDTO userLoginDTO = new UserLoginDTO();
+        LoginRequest loginRequest = new LoginRequest();
         given()
                 .when()
-                .body(userLoginDTO)
+                .body(loginRequest)
                 .contentType(ContentType.JSON)
                 .post("/api/login")
                 .then()
